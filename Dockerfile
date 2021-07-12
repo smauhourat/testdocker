@@ -1,5 +1,5 @@
 # use this empty Dockerfile to build your assignment
-
+FROM node:6-alpine
 # This dir contains a Node.js app, you need to get it running in a container
 # No modifications to the app should be necessary, only edit this Dockerfile
 
@@ -13,14 +13,25 @@
 # then start a new container from your Hub image, and watch how it auto downloads and runs
 # test again that it works at http://localhost
 
+WORKDIR /usr/src/app
+
+COPY package.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD [ "npm", "start" ]
 
 # Instructions from the app developer
 # - you should use the 'node' official image, with the alpine 6.x branch (node:6-alpine)
-  #  yes this is a 2-year old image of node, but all official images are always
-  #  available on Docker Hub forever, to ensure even old apps still work.
-  #  It is common to still need to deploy old app versions, even years later.
+#  yes this is a 2-year old image of node, but all official images are always
+#  available on Docker Hub forever, to ensure even old apps still work.
+#  It is common to still need to deploy old app versions, even years later.
 # - this app listens on port 3000, but the container should launch on port 80
-  #  so it will respond to http://localhost:80 on your computer
+#  so it will respond to http://localhost:80 on your computer
 # - then it should use alpine package manager to install tini: 'apk add --update tini'
 # - then it should create directory /usr/src/app for app files with 'mkdir -p /usr/src/app'
 # - Node uses a "package manager", so it needs to copy in package.json file
